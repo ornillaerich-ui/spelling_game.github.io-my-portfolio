@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Spelling Game</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color: transparent;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+}
+
+html,body{
+    width:100%;
+    height:100%;
+    overflow-x:hidden;
+}
+
+body{
+    background:#bfe8ff;
+
+    min-height:100vh;
+    min-height:100dvh;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    padding:
+        max(15px, env(safe-area-inset-top))
+        max(15px, env(safe-area-inset-right))
+        max(15px, env(safe-area-inset-bottom))
+        max(15px, env(safe-area-inset-left));
+}
+
+.app{
+    width:100%;
+    max-width:1000px;
+}
+
+.screen{
+    display:none;
+    width:100%;
+}
+
+.active{
+    display:block;
+}
+
+.card{
+    width:100%;
+
+    background:white;
+
+    border-radius:24px;
+
+    padding:clamp(15px,4vw,30px);
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.12);
+
+    overflow:hidden;
+}
+
+.center{
+    text-align:center;
+}
+
+.logo{
+    margin-bottom:25px;
+}
+
+.logo-top{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    flex-wrap:wrap;
+
+    gap:8px;
+
+    margin-bottom:10px;
+}
+
+.logo-letter{
+    width:clamp(38px,8vw,60px);
+    height:clamp(38px,8vw,60px);
+
+    background:white;
+
+    border:2px solid black;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:clamp(18px,4vw,30px);
+
+    font-weight:bold;
+
+    border-radius:10px;
+}
+
+.logo-sub{
+    font-size:clamp(32px,8vw,55px);
+    font-weight:bold;
+    color:#1e4ecc;
+}
+
+.info-box{
+    background:#d6ffd6;
+
+    padding:14px;
+
+    border-radius:14px;
+
+    border:2px solid white;
+
+    margin-bottom:20px;
+
+    font-weight:bold;
+
+    text-align:center;
+
+    line-height:1.5;
+}
+
+input{
+    width:100%;
+
+    padding:16px;
+
+    margin:10px 0;
+
+    border-radius:14px;
+
+    border:1px solid #ccc;
+
+    font-size:16px;
+
+    outline:none;
+}
+
+input:focus{
+    border-color:#2155d6;
+}
+
+button{
+    border:none;
+
+    padding:16px;
+
+    border-radius:14px;
+
+    font-weight:bold;
+
+    font-size:16px;
+
+    cursor:pointer;
+
+    transition:0.2s;
+
+    min-height:52px;
+}
+
+button:active{
+    transform:scale(0.97);
+}
+
+.blue{
+    background:#2155d6;
+    color:white;
+}
+
+.green{
+    background:#2fa34f;
+    color:white;
+}
+
+.red{
+    background:#d62f2f;
+    color:white;
+}
+
+.menu-buttons{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+}
+
+.top-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    gap:10px;
+
+    flex-wrap:wrap;
+
+    margin-bottom:20px;
+}
+
+.progress{
+    display:flex;
+    flex-wrap:wrap;
+
+    gap:10px;
+
+    margin:15px 0;
+}
+
+.progress-circle{
+    width:clamp(28px,7vw,38px);
+    height:clamp(28px,7vw,38px);
+
+    border-radius:50%;
+
+    background:#d6d6e8;
+
+    transition:0.3s;
+}
+
+.progress-circle.done{
+    background:#39b54a;
+}
+
+.jumble{
+    font-size:clamp(42px,12vw,85px);
+
+    font-weight:bold;
+
+    text-align:center;
+
+    margin:25px 0;
+
+    word-break:break-word;
+}
+
+.answer{
+    font-size:clamp(20px,5vw,32px);
+
+    text-align:center;
+
+    margin-bottom:15px;
+
+    word-break:break-word;
+}
+
+.message{
+    text-align:center;
+
+    font-size:clamp(16px,4vw,24px);
+
+    font-weight:bold;
+
+    min-height:30px;
+
+    margin-bottom:15px;
+}
+
+.hint{
+    font-size:clamp(15px,3.5vw,22px);
+
+    margin-bottom:18px;
+
+    color:#1f3ca3;
+
+    font-weight:bold;
+
+    text-align:center;
+}
+
+.alphabet{
+    display:grid;
+
+    grid-template-columns:
+        repeat(auto-fit,minmax(50px,1fr));
+
+    gap:8px;
+
+    margin-bottom:20px;
+}
+
+.letter-btn{
+    background:#b6ffb6;
+
+    color:black;
+
+    font-size:clamp(16px,4vw,22px);
+
+    font-weight:bold;
+
+    aspect-ratio:1/1;
+
+    min-height:50px;
+}
+
+.bottom-buttons{
+    display:flex;
+
+    gap:10px;
+
+    flex-wrap:wrap;
+}
+
+.bottom-buttons button{
+    flex:1 1 120px;
+}
+
+.dashboard-table{
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:20px;
+
+    overflow:hidden;
+
+    border-radius:12px;
+}
+
+.dashboard-table th,
+.dashboard-table td{
+    border:1px solid #ddd;
+
+    padding:14px;
+
+    text-align:left;
+
+    font-size:clamp(14px,3vw,18px);
+}
+
+.dashboard-table th{
+    background:#2155d6;
+    color:white;
+}
+
+.instructions{
+    line-height:1.8;
+
+    font-size:clamp(15px,4vw,22px);
+}
+
+.hidden{
+    display:none;
+}
+
+/* iPhone portrait */
+@media(max-width:480px){
+
+    .card{
+        border-radius:20px;
+    }
+
+    .alphabet{
+        grid-template-columns:
+            repeat(5,1fr);
+    }
+
+    .top-row{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .top-row button{
+        width:100%;
+    }
+}
+
+/* iPad */
+@media(min-width:768px){
+
+    .card{
+        padding:35px;
+    }
+
+    .alphabet{
+        grid-template-columns:
+            repeat(10,1fr);
+    }
+}
+
+/* Landscape phones */
+@media(max-height:500px) and (orientation:landscape){
+
+    body{
+        align-items:flex-start;
+    }
+
+    .logo{
+        margin-bottom:10px;
+    }
+
+    .jumble{
+        margin:10px 0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- LOGIN SCREEN -->
+    <div id="loginScreen" class="screen active">
+
+        <div class="logo">
+            <div class="logo-top" id="logoLetters"></div>
+            <div class="logo-sub center">GAME</div>
+        </div>
+
+        <div class="card">
+
+            <h1 class="center" style="color:#2155d6;margin-bottom:20px;">
+                PLAYER LOG IN
+            </h1>
+
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+
+            <p id="loginMessage" class="message"></p>
+
+            <div class="menu-buttons">
+                <button class="blue" onclick="login()">LOG IN</button>
+                <button class="green" onclick="signup()">CREATE ACCOUNT</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- MENU SCREEN -->
+    <div id="menuScreen" class="screen">
+
+        <div class="logo">
+            <div class="logo-top" id="logoLetters2"></div>
+            <div class="logo-sub center">GAME</div>
+        </div>
+
+        <div class="card">
+
+            <div class="info-box" id="playerInfo"></div>
+
+            <div class="menu-buttons">
+                <button class="blue" onclick="startNewGame()">START NEW GAME</button>
+                <button class="green" onclick="showInstructions()">HOW TO PLAY?</button>
+                <button class="blue" onclick="showDashboard()">DASHBOARD</button>
+                <button class="red" onclick="logout()">LOG OUT</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- GAME SCREEN -->
+    <div id="gameScreen" class="screen">
+
+        <div class="card">
+
+            <div class="top-row">
+                <h2 id="levelText">Level 1</h2>
+                <button class="blue" onclick="exitGame()">EXIT</button>
+            </div>
+
+            <div id="progressBar" class="progress"></div>
+
+            <h3 id="timerText">Time: 50s</h3>
+
+            <div id="jumbleWord" class="jumble"></div>
+
+            <div class="answer" id="answerText">
+                ANSWER:
+            </div>
+
+            <div class="message" id="gameMessage"></div>
+
+            <div class="hint" id="hintText"></div>
+
+            <div class="alphabet" id="alphabetGrid"></div>
+
+            <div class="bottom-buttons">
+                <button class="red" style="flex:1;" onclick="eraseWord()">ERASE</button>
+                <button class="blue" style="flex:1;" onclick="submitWord()">SUBMIT</button>
+                <button class="green" style="flex:1;" onclick="showHint()">?</button>
+            </div>
+
+            <button
+                id="nextBtn"
+                class="green hidden"
+                style="margin-top:20px;width:100%;"
+                onclick="nextLevel()">
+                PROCEED TO NEXT LEVEL
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="dashboardScreen" class="screen">
+
+        <div class="card">
+
+            <h1 class="center" style="color:#2155d6;">
+                PLAYER PERFORMANCE CARD
+            </h1>
+
+            <table class="dashboard-table">
+
+                <tr>
+                    <th>STATISTIC</th>
+                    <th>VALUE</th>
+                </tr>
+
+                <tr>
+                    <td>Highest Level Reached</td>
+                    <td id="dashLevel"></td>
+                </tr>
+
+                <tr>
+                    <td>Best Time Remaining</td>
+                    <td id="dashTime"></td>
+                </tr>
+
+                <tr>
+                    <td>Total Valid Words Found</td>
+                    <td id="dashWords"></td>
+                </tr>
+
+                <tr>
+                    <td>Hints Used</td>
+                    <td id="dashHints"></td>
+                </tr>
+
+            </table>
+
+            <button
+                class="blue"
+                style="margin-top:20px;width:100%;"
+                onclick="showMenu()">
+                RETURN TO MENU
+            </button>
+
+        </div>
+    </div>
+
+    <!-- INSTRUCTIONS -->
+    <div id="instructionScreen" class="screen">
+
+        <div class="card">
+
+            <h1 class="center" style="color:#2155d6;margin-bottom:20px;">
+                HOW TO PLAY
+            </h1>
+
+            <div class="instructions">
+
+                Unscramble the jumbled letters before the timer ends.
+                <br><br>
+
+                Every correct answer gives +3 seconds.
+                <br><br>
+
+                Bonus words also give +3 seconds.
+                <br><br>
+
+                Using hints deducts 5 seconds.
+                <br><br>
+
+                Finish all words to advance levels.
+
+            </div>
+
+            <button
+                class="blue"
+                style="margin-top:25px;width:100%;"
+                onclick="showMenu()">
+                BACK
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+const levels = {
+    1:[
+        ["CTA","CAT"],
+        ["ODG","DOG"],
+        ["NSU","SUN"],
+        ["OKOB","BOOK"],
+        ["ERET","TREE"]
+    ],
+    2:[
+        ["AFN","FAN"],
+        ["ATB","BAT"],
+        ["KSY","SKY"],
+        ["GPI","PIG"],
+        ["PCU","CUP"]
+    ]
+};
+
+const clues = {
+    "CAT":"Meows and chases mice.",
+    "DOG":"Man's best friend.",
+    "SUN":"Daytime star.",
+    "BOOK":"You read this.",
+    "TREE":"Has leaves."
+};
+
+let accounts = JSON.parse(localStorage.getItem("accounts")) || {};
+
+let currentUser = null;
+let currentLevel = 1;
+let wordIndex = 0;
+let currentInput = "";
+let timeLeft = 50;
+let timer = null;
+
+function createLogo(){
+    const word = "SPELLING";
+
+    document.querySelectorAll("#logoLetters,#logoLetters2")
+    .forEach(container=>{
+
+        if(!container) return;
+
+        container.innerHTML = "";
+
+        word.split("").forEach(letter=>{
+
+            const div = document.createElement("div");
+            div.className = "logo-letter";
+            div.innerText = letter;
+
+            container.appendChild(div);
+        });
+    });
+}
+
+createLogo();
+
+function saveAccounts(){
+    localStorage.setItem("accounts", JSON.stringify(accounts));
+}
+
+function showScreen(id){
+
+    document.querySelectorAll(".screen")
+    .forEach(s=>s.classList.remove("active"));
+
+    document.getElementById(id).classList.add("active");
+}
+
+function signup(){
+
+    const user = username.value.trim();
+    const pass = password.value.trim();
+
+    if(!user || !pass){
+        loginMessage.innerHTML = "Fill both fields!";
+        return;
+    }
+
+    if(accounts[user]){
+        loginMessage.innerHTML = "Username already exists!";
+        return;
+    }
+
+    accounts[user] = {
+        password: pass,
+        top_level:1,
+        best_time:0,
+        total_valid_words:0,
+        hints_used:0
+    };
+
+    saveAccounts();
+
+    loginMessage.style.color = "green";
+    loginMessage.innerHTML = "Account created!";
+}
+
+function login(){
+
+    const user = username.value.trim();
+    const pass = password.value.trim();
+
+    if(
+        accounts[user] &&
+        accounts[user].password === pass
+    ){
+
+        currentUser = user;
+        showMenu();
+
+    }else{
+        loginMessage.innerHTML = "Invalid credentials!";
+    }
+}
+
+function showMenu(){
+
+    playerInfo.innerHTML =
+        `Player: ${currentUser} | Top Level: ${accounts[currentUser].top_level}`;
+
+    showScreen("menuScreen");
+}
+
+function logout(){
+
+    stopTimer();
+
+    currentUser = null;
+
+    showScreen("loginScreen");
+}
+
+function showInstructions(){
+    showScreen("instructionScreen");
+}
+
+function showDashboard(){
+
+    const user = accounts[currentUser];
+
+    dashLevel.innerHTML = user.top_level;
+    dashTime.innerHTML = user.best_time + "s";
+    dashWords.innerHTML = user.total_valid_words;
+    dashHints.innerHTML = user.hints_used;
+
+    showScreen("dashboardScreen");
+}
+
+function startNewGame(){
+
+    currentLevel = 1;
+    wordIndex = 0;
+    currentInput = "";
+    timeLeft = 50;
+
+    renderGame();
+    startTimer();
+
+    showScreen("gameScreen");
+}
+
+function renderGame(){
+
+    levelText.innerHTML = `Level ${currentLevel}`;
+
+    timerText.innerHTML = `Time: ${timeLeft}s`;
+
+    jumbleWord.innerHTML = getJumble();
+
+    answerText.innerHTML = "ANSWER: " + currentInput;
+
+    hintText.innerHTML = "";
+
+    gameMessage.innerHTML = "";
+
+    renderProgress();
+    renderAlphabet();
+
+    nextBtn.classList.add("hidden");
+}
+
+function renderProgress(){
+
+    progressBar.innerHTML = "";
+
+    const total = levels[currentLevel].length;
+
+    for(let i=0;i<total;i++){
+
+        const div = document.createElement("div");
+
+        div.className = "progress-circle";
+
+        if(i < wordIndex){
+            div.classList.add("done");
+        }
+
+        progressBar.appendChild(div);
+    }
+}
+
+function renderAlphabet(){
+
+    alphabetGrid.innerHTML = "";
+
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    .split("")
+    .forEach(letter=>{
+
+        const btn = document.createElement("button");
+
+        btn.className = "letter-btn";
+
+        btn.innerHTML = letter;
+
+        btn.onclick = ()=>addLetter(letter);
+
+        alphabetGrid.appendChild(btn);
+    });
+}
+
+function getJumble(){
+    return levels[currentLevel][wordIndex][0];
+}
+
+function getTarget(){
+    return levels[currentLevel][wordIndex][1];
+}
+
+function addLetter(letter){
+
+    currentInput += letter;
+
+    answerText.innerHTML = "ANSWER: " + currentInput;
+}
+
+function eraseWord(){
+
+    currentInput = "";
+
+    answerText.innerHTML = "ANSWER:";
+}
+
+function submitWord(){
+
+    const target = getTarget();
+
+    if(currentInput === target){
+
+        timeLeft += 3;
+
+        accounts[currentUser].total_valid_words++;
+
+        saveAccounts();
+
+        gameMessage.style.color = "green";
+        gameMessage.innerHTML = "CORRECT! +3s";
+
+        wordIndex++;
+
+        currentInput = "";
+
+        if(wordIndex >= levels[currentLevel].length){
+
+            levelComplete();
+
+        }else{
+
+            setTimeout(()=>{
+                renderGame();
+            },500);
+        }
+
+    }else{
+
+        gameMessage.style.color = "red";
+        gameMessage.innerHTML = "TRY AGAIN!";
+
+        currentInput = "";
+    }
+
+    answerText.innerHTML = "ANSWER:";
+}
+
+function showHint(){
+
+    const target = getTarget();
+
+    if(clues[target]){
+
+        hintText.innerHTML =
+            "Hint: " + clues[target];
+
+        timeLeft -= 5;
+
+        accounts[currentUser].hints_used++;
+
+        saveAccounts();
+
+        timerText.innerHTML =
+            `Time: ${timeLeft}s`;
+    }
+}
+
+function levelComplete(){
+
+    stopTimer();
+
+    gameMessage.style.color = "green";
+    gameMessage.innerHTML = "LEVEL COMPLETE!";
+
+    nextBtn.classList.remove("hidden");
+
+    if(
+        timeLeft >
+        accounts[currentUser].best_time
+    ){
+        accounts[currentUser].best_time = timeLeft;
+    }
+
+    if(
+        currentLevel >=
+        accounts[currentUser].top_level
+    ){
+        accounts[currentUser].top_level =
+            currentLevel + 1;
+    }
+
+    saveAccounts();
+}
+
+function nextLevel(){
+
+    if(levels[currentLevel + 1]){
+
+        currentLevel++;
+
+        wordIndex = 0;
+
+        currentInput = "";
+
+        timeLeft = 50;
+
+        renderGame();
+
+        startTimer();
+
+    }else{
+
+        alert("YOU FINISHED THE GAME!");
+
+        showMenu();
+    }
+}
+
+function startTimer(){
+
+    stopTimer();
+
+    timer = setInterval(()=>{
+
+        timeLeft--;
+
+        timerText.innerHTML =
+            `Time: ${timeLeft}s`;
+
+        if(timeLeft <= 10){
+            timerText.style.color = "red";
+        }
+
+        if(timeLeft <= 0){
+
+            stopTimer();
+
+            alert("GAME OVER!");
+
+            showMenu();
+        }
+
+    },1000);
+}
+
+function stopTimer(){
+
+    clearInterval(timer);
+}
+
+function exitGame(){
+
+    stopTimer();
+
+    showMenu();
+}
+
+</script>
+
+</body>
+</html>
