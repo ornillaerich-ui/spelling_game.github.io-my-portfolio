@@ -11,7 +11,7 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
-    -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color:transparent;
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
 }
 
@@ -22,25 +22,49 @@ html,body{
 }
 
 body{
-    background:#bfe8ff;
-
     min-height:100vh;
     min-height:100dvh;
-
     display:flex;
     justify-content:center;
     align-items:center;
+    padding:max(12px,env(safe-area-inset-top))
+            max(12px,env(safe-area-inset-right))
+            max(12px,env(safe-area-inset-bottom))
+            max(12px,env(safe-area-inset-left));
+    overflow:hidden;
+    position:relative;
 
-    padding:
-        max(15px, env(safe-area-inset-top))
-        max(15px, env(safe-area-inset-right))
-        max(15px, env(safe-area-inset-bottom))
-        max(15px, env(safe-area-inset-left));
+    background:
+    radial-gradient(circle at top left,rgba(255,255,255,.25) 0%,transparent 28%),
+    radial-gradient(circle at bottom right,rgba(255,255,255,.20) 0%,transparent 25%),
+    radial-gradient(circle at top right,rgba(255,255,255,.15) 0%,transparent 20%),
+    linear-gradient(180deg,#9fd8ff 0%,#8fd0ff 100%);
+}
+
+body::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background-image:radial-gradient(rgba(80,130,200,.18) 1px,transparent 1px);
+    background-size:18px 18px;
+    pointer-events:none;
+}
+
+body::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+    radial-gradient(circle at 8% 10%,transparent 0 70px,rgba(255,255,255,.18) 72px 76px,transparent 78px),
+    radial-gradient(circle at 92% 88%,transparent 0 85px,rgba(255,255,255,.18) 87px 91px,transparent 93px);
+    pointer-events:none;
 }
 
 .app{
     width:100%;
-    max-width:1000px;
+    max-width:560px;
+    position:relative;
+    z-index:1;
 }
 
 .screen{
@@ -52,97 +76,82 @@ body{
     display:block;
 }
 
-.card{
-    width:100%;
-
-    background:white;
-
-    border-radius:24px;
-
-    padding:clamp(15px,4vw,30px);
-
-    box-shadow:
-        0 10px 30px rgba(0,0,0,0.12);
-
-    overflow:hidden;
+.hidden{
+    display:none;
 }
 
 .center{
     text-align:center;
 }
 
+.card{
+    width:100%;
+    background:rgba(255,255,255,.95);
+    border-radius:24px;
+    padding:22px;
+    overflow:hidden;
+    backdrop-filter:blur(6px);
+    box-shadow:0 10px 24px rgba(0,0,0,.14);
+}
+
 .logo{
-    margin-bottom:25px;
+    margin-bottom:18px;
+    animation:floatLogo 4s ease-in-out infinite;
 }
 
 .logo-top{
-    display:flex;
+    display:grid;
+    grid-template-columns:repeat(8,1fr);
     justify-content:center;
     align-items:center;
-
-    flex-wrap:wrap;
-
     gap:8px;
-
     margin-bottom:10px;
+    width:max-content;
+    margin-left:auto;
+    margin-right:auto;
 }
 
 .logo-letter{
-    width:clamp(38px,8vw,60px);
-    height:clamp(38px,8vw,60px);
-
-    background:white;
-
-    border:2px solid black;
-
+    width:clamp(42px,10vw,68px);
+    height:clamp(42px,10vw,68px);
     display:flex;
     justify-content:center;
     align-items:center;
-
-    font-size:clamp(18px,4vw,30px);
-
-    font-weight:bold;
-
-    border-radius:10px;
+    background:white;
+    border:3px solid #2a4ca8;
+    border-radius:14px;
+    color:#183b8f;
+    font-size:clamp(22px,5vw,32px);
+    font-weight:900;
+    box-shadow:0 5px 12px rgba(0,0,0,.12);
 }
 
 .logo-sub{
-    font-size:clamp(32px,8vw,55px);
-    font-weight:bold;
+    font-size:clamp(42px,10vw,68px);
+    font-weight:900;
     color:#1e4ecc;
+    letter-spacing:2px;
+    text-shadow:0 5px 12px rgba(0,0,0,.16);
 }
 
 .info-box{
     background:#d6ffd6;
-
-    padding:14px;
-
-    border-radius:14px;
-
+    padding:12px;
+    border-radius:12px;
     border:2px solid white;
-
-    margin-bottom:20px;
-
+    margin-bottom:16px;
     font-weight:bold;
-
     text-align:center;
-
-    line-height:1.5;
+    line-height:1.4;
 }
 
 input{
     width:100%;
-
-    padding:16px;
-
-    margin:10px 0;
-
-    border-radius:14px;
-
+    padding:14px;
+    margin:8px 0;
+    border-radius:12px;
     border:1px solid #ccc;
-
-    font-size:16px;
-
+    font-size:15px;
     outline:none;
 }
 
@@ -152,24 +161,17 @@ input:focus{
 
 button{
     border:none;
-
-    padding:16px;
-
-    border-radius:14px;
-
+    padding:12px;
+    border-radius:12px;
+    font-size:14px;
     font-weight:bold;
-
-    font-size:16px;
-
     cursor:pointer;
-
-    transition:0.2s;
-
-    min-height:52px;
+    transition:.2s;
+    min-height:44px;
 }
 
 button:active{
-    transform:scale(0.97);
+    transform:scale(.97);
 }
 
 .blue{
@@ -187,42 +189,61 @@ button:active{
     color:white;
 }
 
+.music-toggle{
+    position:fixed;
+    top:20px;
+    right:20px;
+    width:54px;
+    height:54px;
+    border-radius:50%;
+    border:none;
+    background:rgba(255,255,255,.95);
+    box-shadow:0 4px 12px rgba(0,0,0,.15);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:24px;
+    cursor:pointer;
+    z-index:999;
+    transition:.2s;
+    animation:floatBubble 4s ease-in-out infinite;
+}
+
+.music-toggle:active{
+    transform:scale(.92);
+}
+
 .menu-buttons{
     display:flex;
     flex-direction:column;
-    gap:12px;
+    gap:10px;
 }
 
 .top-row{
     display:flex;
     justify-content:space-between;
     align-items:center;
+    gap:8px;
+    margin-bottom:10px;
+}
 
-    gap:10px;
-
-    flex-wrap:wrap;
-
-    margin-bottom:20px;
+.top-row h2{
+    font-size:18px;
 }
 
 .progress{
     display:flex;
     flex-wrap:wrap;
-
-    gap:10px;
-
-    margin:15px 0;
+    gap:8px;
+    margin:10px 0;
 }
 
 .progress-circle{
-    width:clamp(28px,7vw,38px);
-    height:clamp(28px,7vw,38px);
-
+    width:24px;
+    height:24px;
     border-radius:50%;
-
     background:#d6d6e8;
-
-    transition:0.3s;
+    transition:.3s;
 }
 
 .progress-circle.done{
@@ -230,109 +251,79 @@ button:active{
 }
 
 .jumble{
-    font-size:clamp(42px,12vw,85px);
-
+    font-size:clamp(30px,9vw,54px);
     font-weight:bold;
-
     text-align:center;
-
-    margin:25px 0;
-
+    margin:14px 0;
     word-break:break-word;
 }
 
 .answer{
-    font-size:clamp(20px,5vw,32px);
-
+    font-size:clamp(16px,4vw,24px);
     text-align:center;
-
-    margin-bottom:15px;
-
+    margin-bottom:10px;
     word-break:break-word;
 }
 
 .message{
+    min-height:24px;
+    margin-bottom:10px;
     text-align:center;
-
-    font-size:clamp(16px,4vw,24px);
-
+    font-size:clamp(14px,4vw,20px);
     font-weight:bold;
-
-    min-height:30px;
-
-    margin-bottom:15px;
 }
 
 .hint{
-    font-size:clamp(15px,3.5vw,22px);
-
-    margin-bottom:18px;
-
-    color:#1f3ca3;
-
-    font-weight:bold;
-
+    margin-bottom:12px;
     text-align:center;
+    color:#1f3ca3;
+    font-size:clamp(14px,3.5vw,18px);
+    font-weight:bold;
 }
 
 .alphabet{
     display:grid;
-
-    grid-template-columns:
-        repeat(auto-fit,minmax(50px,1fr));
-
-    gap:8px;
-
-    margin-bottom:20px;
+    grid-template-columns:repeat(5,1fr);
+    gap:6px;
+    margin-bottom:14px;
 }
 
 .letter-btn{
-    background:#b6ffb6;
-
-    color:black;
-
-    font-size:clamp(16px,4vw,22px);
-
-    font-weight:bold;
-
+    width:100%;
     aspect-ratio:1/1;
-
-    min-height:50px;
+    min-height:44px;
+    max-height:58px;
+    border-radius:12px;
+    background:#a7f0a7;
+    color:black;
+    font-size:clamp(14px,4vw,18px);
+    font-weight:bold;
 }
 
 .bottom-buttons{
     display:flex;
-
-    gap:10px;
-
     flex-wrap:wrap;
+    gap:8px;
 }
 
 .bottom-buttons button{
-    flex:1 1 120px;
+    flex:1 1 100px;
 }
 
 .dashboard-table{
     width:100%;
-
+    margin-top:14px;
     border-collapse:collapse;
-
-    margin-top:20px;
-
     overflow:hidden;
-
-    border-radius:12px;
+    border-radius:10px;
 }
 
 .dashboard-table th,
 .dashboard-table td{
     border:1px solid #ddd;
-
-    padding:14px;
-
+    padding:10px;
     text-align:left;
-
-    font-size:clamp(14px,3vw,18px);
+    font-size:clamp(12px,3vw,16px);
 }
 
 .dashboard-table th{
@@ -341,26 +332,78 @@ button:active{
 }
 
 .instructions{
-    line-height:1.8;
-
-    font-size:clamp(15px,4vw,22px);
+    line-height:1.5;
+    font-size:clamp(14px,4vw,18px);
 }
 
-.hidden{
-    display:none;
+.stars,
+.bubbles{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:0;
 }
 
-/* iPhone portrait */
+.star{
+    position:absolute;
+    opacity:.95;
+    animation:float 5s ease-in-out infinite;
+}
+
+.star1{top:3%;left:4%;font-size:18px;}
+.star2{top:8%;left:25%;font-size:20px;}
+.star3{top:5%;right:10%;font-size:24px;}
+.star4{top:18%;right:22%;font-size:14px;}
+.star5{top:28%;left:8%;font-size:30px;}
+.star6{top:35%;right:12%;font-size:22px;}
+.star7{top:45%;left:18%;font-size:18px;}
+.star8{top:50%;right:28%;font-size:28px;}
+.star9{top:12%;left:70%;font-size:42px;}
+.star10{top:60%;left:5%;font-size:38px;}
+.star11{top:72%;right:8%;font-size:44px;}
+.star12{top:80%;left:20%;font-size:12px;}
+.star13{top:88%;left:42%;font-size:16px;}
+.star14{bottom:10%;right:30%;font-size:18px;}
+.star15{bottom:5%;left:65%;font-size:14px;}
+
+.bubble{
+    position:absolute;
+    border-radius:50%;
+    background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.9),rgba(255,255,255,.15));
+    border:1px solid rgba(255,255,255,.35);
+    backdrop-filter:blur(3px);
+    animation:floatBubble 10s ease-in-out infinite;
+}
+
+.b1{width:20px;height:20px;top:8%;left:12%;}
+.b2{width:16px;height:16px;top:22%;right:18%;}
+.b3{width:18px;height:18px;top:35%;left:5%;}
+.b4{width:12px;height:12px;top:55%;right:8%;}
+.b5{width:20px;height:20px;bottom:18%;left:28%;}
+.b6{width:34px;height:34px;top:12%;right:35%;}
+.b7{width:30px;height:30px;top:42%;left:25%;}
+.b8{width:40px;height:40px;bottom:12%;right:20%;}
+.b9{width:28px;height:28px;top:68%;left:10%;}
+
+@keyframes float{
+    0%{transform:translateY(0);}
+    50%{transform:translateY(-8px);}
+    100%{transform:translateY(0);}
+}
+
+@keyframes floatBubble{
+    0%{transform:translateY(0);}
+    50%{transform:translateY(-12px);}
+    100%{transform:translateY(0);}
+}
+
+@keyframes floatLogo{
+    0%{transform:translateY(0px);}
+    50%{transform:translateY(-8px);}
+    100%{transform:translateY(0px);}
+}
+
 @media(max-width:480px){
-
-    .card{
-        border-radius:20px;
-    }
-
-    .alphabet{
-        grid-template-columns:
-            repeat(5,1fr);
-    }
 
     .top-row{
         flex-direction:column;
@@ -372,42 +415,67 @@ button:active{
     }
 }
 
-/* iPad */
-@media(min-width:768px){
-
-    .card{
-        padding:35px;
-    }
-
-    .alphabet{
-        grid-template-columns:
-            repeat(10,1fr);
-    }
-}
-
-/* Landscape phones */
-@media(max-height:500px) and (orientation:landscape){
-
-    body{
-        align-items:flex-start;
-    }
-
-    .logo{
-        margin-bottom:10px;
-    }
-
-    .jumble{
-        margin:10px 0;
-    }
-}
 </style>
 </head>
 
 <body>
 
+    <audio id="bgMusic" autoplay loop>
+    <source src="Aylex - Fun is Fun (freetouse.com).mp3" type="audio/mpeg">
+</audio>
+
+<button
+    id="musicBtn"
+    class="music-toggle"
+    onclick="toggleMusic()">
+    🔊
+</button>
+
+<div class="stars">
+
+    <span class="star star1">⭐</span>
+    <span class="star star2">⭐</span>
+    <span class="star star3">⭐</span>
+    <span class="star star4">⭐</span>
+    <span class="star star5">⭐</span>
+    <span class="star star6">⭐</span>
+    <span class="star star7">⭐</span>
+    <span class="star star8">⭐</span>
+    <span class="star star9">⭐</span>
+    <span class="star star10">⭐</span>
+    <span class="star star11">⭐</span>
+    <span class="star star12">⭐</span>
+    <span class="star star13">⭐</span>
+    <span class="star star14">⭐</span>
+    <span class="star star15">⭐</span>
+    <span class="star star16">⭐</span>
+    <span class="star star17">⭐</span>
+    <span class="star star18">⭐</span>
+    <span class="star star19">⭐</span>
+    <span class="star star20">⭐</span>
+
+<div class="bubbles">
+
+    <span class="bubble b1"></span>
+    <span class="bubble b2"></span>
+    <span class="bubble b3"></span>
+    <span class="bubble b4"></span>
+    <span class="bubble b5"></span>
+    <span class="bubble b6"></span>
+    <span class="bubble b7"></span>
+    <span class="bubble b8"></span>
+    <span class="bubble b9"></span>
+    <span class="bubble b10"></span>
+    <span class="bubble b11"></span>
+    <span class="bubble b12"></span>
+    <span class="bubble b13"></span>
+    <span class="bubble b14"></span>
+    <span class="bubble b15"></span>
+</div>
+</div>
+
 <div class="app">
 
-    <!-- LOGIN SCREEN -->
     <div id="loginScreen" class="screen active">
 
         <div class="logo">
@@ -434,7 +502,6 @@ button:active{
         </div>
     </div>
 
-    <!-- MENU SCREEN -->
     <div id="menuScreen" class="screen">
 
         <div class="logo">
@@ -447,16 +514,23 @@ button:active{
             <div class="info-box" id="playerInfo"></div>
 
             <div class="menu-buttons">
-                <button class="blue" onclick="startNewGame()">START NEW GAME</button>
-                <button class="green" onclick="showInstructions()">HOW TO PLAY?</button>
-                <button class="blue" onclick="showDashboard()">DASHBOARD</button>
-                <button class="red" onclick="logout()">LOG OUT</button>
-            </div>
+    <button class="blue" onclick="startNewGame()">START NEW GAME</button>
+
+    <button
+        id="resumeBtn"
+        class="green hidden"
+        onclick="resumeGame()">
+        RESUME GAME
+    </button>
+
+    <button class="green" onclick="showInstructions()">HOW TO PLAY?</button>
+    <button class="blue" onclick="showDashboard()">DASHBOARD</button>
+    <button class="red" onclick="logout()">LOG OUT</button>
+</div>
 
         </div>
     </div>
 
-    <!-- GAME SCREEN -->
     <div id="gameScreen" class="screen">
 
         <div class="card">
@@ -500,7 +574,6 @@ button:active{
 
     </div>
 
-    <!-- DASHBOARD -->
     <div id="dashboardScreen" class="screen">
 
         <div class="card">
@@ -548,7 +621,6 @@ button:active{
         </div>
     </div>
 
-    <!-- INSTRUCTIONS -->
     <div id="instructionScreen" class="screen">
 
         <div class="card">
@@ -559,19 +631,11 @@ button:active{
 
             <div class="instructions">
 
-                Unscramble the jumbled letters before the timer ends.
-                <br><br>
-
+                <b>Unscramble the jumbled letters before the timer ends.
                 Every correct answer gives +3 seconds.
-                <br><br>
-
-                Bonus words also give +3 seconds.
-                <br><br>
-
+                Bonus words also give +5 seconds.
                 Using hints deducts 5 seconds.
-                <br><br>
-
-                Finish all words to advance levels.
+                Finish all words to advance levels.</b>
 
             </div>
 
@@ -590,6 +654,15 @@ button:active{
 
 <script>
 
+const bgMusic = document.getElementById("bgMusic");
+const musicBtn = document.getElementById("musicBtn");
+
+document.addEventListener("click", ()=>{
+    if(musicPlaying){
+        bgMusic.play();
+    }
+},{ once:true });
+
 const levels = {
     1:[
         ["CTA","CAT"],
@@ -604,15 +677,147 @@ const levels = {
         ["KSY","SKY"],
         ["GPI","PIG"],
         ["PCU","CUP"]
+    ],
+    3:[
+        ["FIER","FIRE"],
+        ["EKIT","KITE"],
+        ["OMON","MOON"],
+        ["IDRB","BIRD"],
+        ["IHFS","FISH"]
+    ],
+    4:[
+        ["LBAL","BALL"],
+        ["RFOK","FORK"],
+        ["LMKI","MILK"],
+        ["GOFR","FROG"],
+        ["ELMA","MEAL"]
+    ],
+    5:[
+        ["PLEPA","APPLE"],
+        ["IARCH","CHAIR"],
+        ["RBAED","BREAD"],
+        ["IRRVE","RIVER"],
+        ["SUEHO","HOUSE"]
+    ],
+    6:[
+        ["NNAABA","BANANA"],
+        ["ELTKTE","KETTLE"],
+        ["ZLZUEP","PUZZLE"],
+        ["WOFELR","FLOWER"],
+        ["EKSSNA","SNAKES"]
+    ],
+    7:[
+        ["MEACRA","CAMERA"],
+        ["DWONIW","WINDOW"],
+        ["KCREOT","ROCKET"],
+        ["NGADOR","DRAGON"],
+        ["ZLIRAD","LIZARD"]
+    ],
+    8:[
+        ["PNAIO","PIANO"],
+        ["MYHTHR","RHYTHM"],
+        ["LXGAYA","GALAXY"],
+        ["HICDOR","ORCHID"],
+        ["EHTLEM","HELMET"]
+    ],
+    9:[
+        ["VUSEINRE","UNIVERSE"],
+        ["NMOATUNI","MOUNTAIN"],
+        ["LPAEHNET","ELEPHANT"],
+        ["TREMOCUP","COMPUTER"],
+        ["NMLPTAIU","PLATINUM"]
+    ],
+    10:[
+        ["TOLCEAHCO","CHOCOLATE"],
+        ["PTEALABH","ALPHABET"],
+        ["YOTCRVI","VICTORY"],
+        ["RUSNODAI","DINOSAUR"],
+        ["APMRDIY","PYRAMID"]
     ]
 };
 
+const bonusDictionary = [
+    "AT","ACT","TA","DO","GOD","GO","US","BOO","KOB","BO","REE","TEE","RE","ET",
+    "AN","FA","AT","BA","TA","TAB","KY","PI","GI","UP","FIRE","IE","RE","IF",
+    "IT","TI", "TIE", "KIT", "MOO","ON","NO","OM","ID","BI","IF","IS","HI","HIBS","ALL","LAB",
+    "AL","LA","FOR","OR","OK","MIL","LI","GO","OR","FRO","ME","AM","AL","MA",
+    "ALE","ELM","LAP","APE","PAL","ALE","PEA","APP","PALE","PLEA","LEAP","AIR",
+    "HI","RICH","ARC","CAR","HAIR","BED","RED","ARE","BAD","BAR","EAR","ERA",
+    "READ","DARE","DEAR","BEAD","BARD","RIVE","ERR","IRE","REV","USE","SO","HE",
+    "OH","US","HOUSE","HOSE","SHOE","BAN","ANA","BAA","NAB","LET","ELK","TEL",
+    "TEE","KEEL","LEE","PUZ","LEZ","FLOW","LOW","ROW","ORE","FOR","ROE","WOLF",
+    "REFLOW","SNAKE","SEA","ASK","SANE","KEAS","SAKE","CAM","ERA","ARE","ACE",
+    "RAM","MAR","ARM","ACME","CARE","RACE","WIN","IN","DO","ON","OW","DIN","OWN",
+    "WIND","DOWN","WINO","ROCK","COT","TO","OR","RE","ROT","CORE","DRAG","AND",
+    "DO","GO","ON","OR","AD","AGO","DOG","DON","ROAD","ROAN","DANG","LIZARD",
+    "RID","AID","AD","LA","LIRA","RAID","DIAL","PIN","PI","AN","IN","ON","NO",
+    "PA","ION","PANO","NAP","HYMN","MY","GALA","GAY","LA","AXA","ALGA","ORC",
+    "RID","DO","OR","HI","OH","COIR","CORD","RICH","HELM","HE","ME","THE","MET",
+    "ELM","HELMET","VERSE","SUN","IN","IS","US","RE","SURE","RISE","USER","RUN",
+    "VEIN","SIRE","MOUNT","UNIT","IN","IT","TO","ON","AM","NUT","ANT","TAN",
+    "MAT","OAT","AUNT","OMIT","MAIN","PANT","TEN","NET","ALE","PAN","TEA","EAT",
+    "ANT","PET","TAP","PEN","PAL","HAT","LAP","LEAN","PLAN","PANE","PEAT","HELP",
+    "HATE","HEAL","COMP","OUT","UP","OR","TO","ME","MET","CUP","COT","CUT","TOP",
+    "MOP","POT","CORE","COME","MUTE","TERM","POEM","POET","PLAT","IN","IT","UP",
+    "AL","AM","AN","PLUM","PLAN","PUNT","UNIT","PAIN","TAIL","MAIL","COCO","COOL",
+    "TOO","TO","LO","HE","OH","ATE","TEA","EAT","LET","ALE","HAT","THE","BETA",
+    "BATH","HATE","HEAL","TABLE","VICTOR","TO","OR","IT","TOY","TRIO","CITY",
+    "SOUR","DIN","IN","IS","ON","NO","DO","OR","US","AD","AID","SUN","ROD","SUD",
+    "SOUR","SAID","RAIN","ROAD","SOAR","IRON","AM","ID","MY","AID","RAM","ARM",
+    "DAM","DRY","MAP","PAY","RAY","YAM","DAMP","MAID","PRAY","YARD"
+];
+
 const clues = {
-    "CAT":"Meows and chases mice.",
-    "DOG":"Man's best friend.",
-    "SUN":"Daytime star.",
-    "BOOK":"You read this.",
-    "TREE":"Has leaves."
+    CAT:"Meows and chases mice.",
+    DOG:"Man's best friend.",
+    SUN:"Daytime star.",
+    BOOK:"You read this.",
+    TREE:"Has leaves.",
+    FAN:"Spins to cool you.",
+    BAT:"Hits a baseball.",
+    SKY:"Clouds float here.",
+    PIG:"Pink farm animal.",
+    CUP:"Used for drinking.",
+    FIRE:"Hot and glows.",
+    KITE:"Flies on string.",
+    MOON:"Glows at night.",
+    BIRD:"Has feathers.",
+    FISH:"Swims underwater.",
+    BALL:"Round toy.",
+    FORK:"Used for eating.",
+    MILK:"White drink.",
+    FROG:"Hops and is green.",
+    MEAL:"Breakfast or lunch.",
+    APPLE:"Red fruit.",
+    CHAIR:"You sit on it.",
+    BREAD:"For sandwiches.",
+    RIVER:"Flowing water.",
+    HOUSE:"A home.",
+    BANANA:"Yellow fruits that the monkeys love.",
+    KETTLE:"Boils water.",
+    PUZZLE:"Many pieces, solve.",
+    FLOWER:"Smells nice and beautiful.",
+    SNAKES:"No legs, has scales.",
+    CAMERA:"Takes photos.",
+    WINDOW:"Wall glass.",
+    ROCKET:"Space vehicle.",
+    DRAGON:"Breathes fire.",
+    LIZARD:"Small reptile.",
+    PIANO:"Has keys.",
+    RHYTHM:"Music beat.",
+    GALAXY:"Stars system.",
+    ORCHID:"Exotic flower.",
+    HELMET:"Head protection.",
+    UNIVERSE:"Everything.",
+    MOUNTAIN:"Tall land.",
+    ELEPHANT:"Large animal.",
+    COMPUTER:"Digital tool.",
+    PLATINUM:"Silver metal.",
+    CHOCOLATE:"Sweet brown.",
+    ALPHABET:"A to Z.",
+    VICTORY:"Winning.",
+    DINOSAUR:"Extinct giant.",
+    PYRAMID:"Triangular tomb."
 };
 
 let accounts = JSON.parse(localStorage.getItem("accounts")) || {};
@@ -621,30 +826,26 @@ let currentUser = null;
 let currentLevel = 1;
 let wordIndex = 0;
 let currentInput = "";
-let timeLeft = 50;
 let timer = null;
+let savedGame = null;
+let gamePaused = false;
+let musicPlaying = true;
+
 
 function createLogo(){
     const word = "SPELLING";
-
     document.querySelectorAll("#logoLetters,#logoLetters2")
     .forEach(container=>{
-
         if(!container) return;
-
         container.innerHTML = "";
-
         word.split("").forEach(letter=>{
-
             const div = document.createElement("div");
             div.className = "logo-letter";
             div.innerText = letter;
-
             container.appendChild(div);
         });
     });
 }
-
 createLogo();
 
 function saveAccounts(){
@@ -652,74 +853,69 @@ function saveAccounts(){
 }
 
 function showScreen(id){
-
     document.querySelectorAll(".screen")
     .forEach(s=>s.classList.remove("active"));
-
     document.getElementById(id).classList.add("active");
 }
 
 function signup(){
-
     const user = username.value.trim();
     const pass = password.value.trim();
-
     if(!user || !pass){
-        loginMessage.innerHTML = "Fill both fields!";
+        loginMessage.innerHTML =
+            "Fill both fields!";
         return;
     }
-
     if(accounts[user]){
-        loginMessage.innerHTML = "Username already exists!";
+        loginMessage.innerHTML =
+            "Username already exists!";
         return;
     }
-
     accounts[user] = {
         password: pass,
-        top_level:1,
-        best_time:0,
-        total_valid_words:0,
-        hints_used:0
+        top_level: 1,
+        best_time: 0,
+        total_valid_words: 0,
+        hints_used: 0,
+        saved_game: null
     };
-
     saveAccounts();
-
     loginMessage.style.color = "green";
-    loginMessage.innerHTML = "Account created!";
+    loginMessage.innerHTML =
+        "Account created!";
 }
 
 function login(){
-
     const user = username.value.trim();
     const pass = password.value.trim();
-
     if(
         accounts[user] &&
         accounts[user].password === pass
     ){
-
         currentUser = user;
+        savedGame =
+            accounts[currentUser].saved_game || null;
         showMenu();
-
     }else{
-        loginMessage.innerHTML = "Invalid credentials!";
+        loginMessage.innerHTML =
+            "Invalid credentials!";
     }
 }
 
 function showMenu(){
-
     playerInfo.innerHTML =
         `Player: ${currentUser} | Top Level: ${accounts[currentUser].top_level}`;
-
+    if(savedGame){
+        resumeBtn.classList.remove("hidden");
+    }else{
+        resumeBtn.classList.add("hidden");
+    }
     showScreen("menuScreen");
 }
 
 function logout(){
-
     stopTimer();
-
     currentUser = null;
-
     showScreen("loginScreen");
 }
 
@@ -728,86 +924,71 @@ function showInstructions(){
 }
 
 function showDashboard(){
-
     const user = accounts[currentUser];
-
     dashLevel.innerHTML = user.top_level;
     dashTime.innerHTML = user.best_time + "s";
     dashWords.innerHTML = user.total_valid_words;
     dashHints.innerHTML = user.hints_used;
-
     showScreen("dashboardScreen");
 }
 
 function startNewGame(){
-
     currentLevel = 1;
     wordIndex = 0;
     currentInput = "";
     timeLeft = 50;
-
+    saveGameProgress();
     renderGame();
     startTimer();
-
     showScreen("gameScreen");
 }
 
 function renderGame(){
-
     levelText.innerHTML = `Level ${currentLevel}`;
-
     timerText.innerHTML = `Time: ${timeLeft}s`;
-
     jumbleWord.innerHTML = getJumble();
-
     answerText.innerHTML = "ANSWER: " + currentInput;
-
     hintText.innerHTML = "";
-
     gameMessage.innerHTML = "";
-
     renderProgress();
     renderAlphabet();
-
     nextBtn.classList.add("hidden");
 }
 
+function saveGameProgress(){
+    if(!currentUser) return;
+    accounts[currentUser].saved_game = {
+        currentLevel,
+        wordIndex,
+        currentInput,
+        timeLeft
+    };
+    savedGame = accounts[currentUser].saved_game;
+    saveAccounts();
+}
+
 function renderProgress(){
-
     progressBar.innerHTML = "";
-
     const total = levels[currentLevel].length;
-
     for(let i=0;i<total;i++){
-
         const div = document.createElement("div");
-
         div.className = "progress-circle";
-
         if(i < wordIndex){
             div.classList.add("done");
         }
-
         progressBar.appendChild(div);
     }
 }
 
 function renderAlphabet(){
-
     alphabetGrid.innerHTML = "";
-
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     .split("")
     .forEach(letter=>{
-
         const btn = document.createElement("button");
-
         btn.className = "letter-btn";
-
         btn.innerHTML = letter;
-
         btn.onclick = ()=>addLetter(letter);
-
         alphabetGrid.appendChild(btn);
     });
 }
@@ -821,168 +1002,204 @@ function getTarget(){
 }
 
 function addLetter(letter){
-
     currentInput += letter;
-
     answerText.innerHTML = "ANSWER: " + currentInput;
+    saveGameProgress();
 }
 
 function eraseWord(){
-
     currentInput = "";
-
     answerText.innerHTML = "ANSWER:";
+    saveGameProgress();
 }
 
 function submitWord(){
 
     const target = getTarget();
-
     if(currentInput === target){
-
         timeLeft += 3;
-
-        accounts[currentUser].total_valid_words++;
-
+        accounts[currentUser]
+        .total_valid_words++;
         saveAccounts();
-
         gameMessage.style.color = "green";
-        gameMessage.innerHTML = "CORRECT! +3s";
-
+        gameMessage.innerHTML =
+            "CORRECT! +3s";
         wordIndex++;
-
+        saveGameProgress();
         currentInput = "";
-
-        if(wordIndex >= levels[currentLevel].length){
-
+        if(
+            wordIndex >=
+            levels[currentLevel].length
+        ){
             levelComplete();
-
         }else{
-
             setTimeout(()=>{
                 renderGame();
             },500);
         }
+    }else if(isBonusWord(currentInput)){
+        timeLeft += 5;
+        gameMessage.style.color = "#1e4ecc";
+        gameMessage.innerHTML =
+            "BONUS WORD! +5s";
+        currentInput = "";
+        saveGameProgress();
 
     }else{
-
         gameMessage.style.color = "red";
-        gameMessage.innerHTML = "TRY AGAIN!";
+
+        gameMessage.innerHTML =
+            "TRY AGAIN!";
 
         currentInput = "";
     }
+    answerText.innerHTML =
+        "ANSWER:";
+}
 
-    answerText.innerHTML = "ANSWER:";
+function isBonusWord(word){
+
+    return bonusDictionary.includes(
+        word.toUpperCase()
+    );
+}
+
+function resumeGame(){
+    if(!savedGame) return;
+    currentLevel =
+        savedGame.currentLevel;
+    wordIndex =
+        savedGame.wordIndex;
+    currentInput =
+        savedGame.currentInput;
+    timeLeft =
+        savedGame.timeLeft;
+    renderGame();
+    startTimer();
+    gamePaused = false;
+    showScreen("gameScreen");
 }
 
 function showHint(){
-
     const target = getTarget();
-
     if(clues[target]){
-
         hintText.innerHTML =
             "Hint: " + clues[target];
-
-        timeLeft -= 5;
-
-        accounts[currentUser].hints_used++;
-
+        accounts[currentUser]
+        .hints_used++;
         saveAccounts();
-
-        timerText.innerHTML =
-            `Time: ${timeLeft}s`;
+        saveGameProgress();
     }
 }
 
 function levelComplete(){
-
     stopTimer();
-
+    renderProgress();
     gameMessage.style.color = "green";
-    gameMessage.innerHTML = "LEVEL COMPLETE!";
-
+    gameMessage.innerHTML =
+        "LEVEL COMPLETE!";
     nextBtn.classList.remove("hidden");
-
     if(
         timeLeft >
         accounts[currentUser].best_time
     ){
-        accounts[currentUser].best_time = timeLeft;
+        accounts[currentUser]
+        .best_time = timeLeft;
     }
-
     if(
         currentLevel >=
         accounts[currentUser].top_level
     ){
-        accounts[currentUser].top_level =
+        accounts[currentUser]
+        .top_level =
             currentLevel + 1;
     }
-
     saveAccounts();
 }
 
 function nextLevel(){
-
     if(levels[currentLevel + 1]){
-
         currentLevel++;
-
         wordIndex = 0;
-
         currentInput = "";
-
-        timeLeft = 50;
-
+        saveGameProgress();
         renderGame();
-
         startTimer();
-
     }else{
-
+        savedGame = null;
+        accounts[currentUser].saved_game = null;
+        saveAccounts();
         alert("YOU FINISHED THE GAME!");
-
         showMenu();
     }
 }
 
 function startTimer(){
-
     stopTimer();
-
     timer = setInterval(()=>{
-
         timeLeft--;
-
         timerText.innerHTML =
             `Time: ${timeLeft}s`;
-
         if(timeLeft <= 10){
             timerText.style.color = "red";
         }
-
         if(timeLeft <= 0){
-
             stopTimer();
-
-            alert("GAME OVER!");
-
-            showMenu();
+            savedGame = null;
+            accounts[currentUser].saved_game = null;
+            saveAccounts();
+            showGameOver();
         }
-
     },1000);
 }
 
 function stopTimer(){
-
     clearInterval(timer);
 }
 
 function exitGame(){
-
     stopTimer();
-
+    saveGameProgress();
+    gamePaused = true;
     showMenu();
+}
+
+function showGameOver(){
+    stopTimer();
+    gameMessage.style.color = "red";
+    gameMessage.innerHTML = `
+        <div style="
+            background:#ffd6d6;
+            padding:18px;
+            border-radius:16px;
+            border:2px solid #ff4d4d;
+            font-size:22px;
+            font-weight:900;
+            color:#c40000;
+            text-align:center;
+            animation:floatCard 2s ease-in-out infinite;
+        ">
+            GAME OVER!
+        </div>
+    `;
+    alphabetGrid.innerHTML = "";
+    hintText.innerHTML = "";
+    nextBtn.classList.add("hidden");
+    setTimeout(()=>{
+        showMenu();
+    },2500);
+}
+
+function toggleMusic(){
+    if(musicPlaying){
+        bgMusic.pause();
+        musicBtn.innerHTML = "🔇";
+        musicPlaying = false;
+    }else{
+        bgMusic.play();
+        musicBtn.innerHTML = "🔊";
+        musicPlaying = true;
+    }
 }
 
 </script>
